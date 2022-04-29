@@ -56,7 +56,7 @@ afterEvaluate {
 
                 groupId = 'com.github.talhatek'
                 artifactId = 'eta-bar-compose'
-                version = '1.0'
+                version = '1.3'
             }
         }
     }
