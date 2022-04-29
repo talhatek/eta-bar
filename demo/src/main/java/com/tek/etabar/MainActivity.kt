@@ -29,13 +29,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) {
 
-                    ETABar(
-                        elapsedPercentage = .02f,
-                        inactiveBarColor = Color.Gray,
-                        activeBarColor = Color.Yellow,
-                        imageBitmap = AppCompatResources.getDrawable(LocalContext.current,R.drawable.ic_airplane)!!.toBitmap().asImageBitmap(),
-                        modifier = Modifier.size(200.dp)
-                    )
+//                    ETABar(
+//                        elapsedPercentage = .02f,
+//                        inactiveBarColor = Color.Gray,
+//                        activeBarColor = Color.Yellow,
+//                        imageBitmap = AppCompatResources.getDrawable(LocalContext.current,R.drawable.ic_airplane)!!.toBitmap().asImageBitmap(),
+//                        modifier = Modifier.size(200.dp)
+//                    )
                 }
 
             }
