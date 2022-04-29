@@ -16,6 +16,10 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.tek.etabar.Const.IMAGE_ROTATION_FIXER
+import com.tek.etabar.Const.START_ANGLE
+import com.tek.etabar.Const.SWEEP_ANGLE
+import java.lang.Math.toRadians
 import kotlin.math.cos
 import kotlin.math.round
 import kotlin.math.sin
@@ -24,12 +28,13 @@ import kotlin.math.sin
  *  @param elapsedPercentage Percentage of elapsed time/total time
  *  @param inactiveBarColor Color of the remainder
  *  @param activeBarColor Color of [elapsedPercentage]
- *  @param imageBitmap ImageBitmap of the icon
+ *  @param imageBitmap ImageBitmap of the icon. Don't forget that direction of the icon is important.
  *  @param modifier Modifier to be applied to the ETABar
  *  @param strokeWidth Stroke width to be applied to the Arc's.
  *  Don't forget to proportion the stroke width to the icon width.
  *  Default icon width 24dp and stroke width 8dp
  */
+@Suppress("unused")
 @Composable
 fun ETABar(
     elapsedPercentage: Float,
@@ -42,12 +47,18 @@ fun ETABar(
     var size by remember {
         mutableStateOf(IntSize.Zero)
     }
-    val center = Offset(size.width / 2f, size.height / 2f)
-    val beta = (250f * elapsedPercentage + 145f) * (Math.PI / 180f).toFloat()
-    val rotate = round((325) + (256 * elapsedPercentage))
-    val radius = size.width / 2f
-    val xOfCurrentPoint = cos(beta) * radius
-    val yOfCurrentPoint = sin(beta) * radius
+    val radius by remember(size) {
+        mutableStateOf(size.width / 2f)
+    }
+
+    val xOfCurrentPoint =
+        radius + cos((toRadians((START_ANGLE + (SWEEP_ANGLE * elapsedPercentage)).toDouble()))) * radius
+    val yOfCurrentPoint =
+        radius + sin(toRadians(((START_ANGLE + (SWEEP_ANGLE * elapsedPercentage)).toDouble()))) * radius
+
+    val rotate =
+        round(START_ANGLE + (SWEEP_ANGLE * elapsedPercentage)) + IMAGE_ROTATION_FIXER
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
@@ -58,35 +69,34 @@ fun ETABar(
         Canvas(modifier = modifier) {
             drawArc(
                 color = inactiveBarColor,
-                startAngle = -215f,
-                sweepAngle = 250f,
+                startAngle = START_ANGLE,
+                sweepAngle = SWEEP_ANGLE,
                 useCenter = false,
                 size = Size(size.width.toFloat(), size.height.toFloat()),
                 style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
             )
             drawArc(
                 color = activeBarColor,
-                startAngle = -215f,
-                sweepAngle = 250f * elapsedPercentage,
+                startAngle = START_ANGLE,
+                sweepAngle = SWEEP_ANGLE * elapsedPercentage,
                 useCenter = false,
                 size = Size(size.width.toFloat(), size.height.toFloat()),
                 style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
             )
 
-
-
             rotate(
                 rotate,
                 pivot = Offset(
-                    ((center.x + xOfCurrentPoint)),
-                    ((center.y + yOfCurrentPoint))
+                    (xOfCurrentPoint).toFloat(),
+                    (yOfCurrentPoint).toFloat()
                 )
+
             ) {
                 drawImage(
                     image = imageBitmap,
                     topLeft = Offset(
-                        ((center.x + xOfCurrentPoint) - imageBitmap.width / 2),
-                        ((center.y + yOfCurrentPoint) - imageBitmap.height / 2)
+                        (((xOfCurrentPoint) - imageBitmap.width / 2).toFloat()),
+                        (((yOfCurrentPoint) - imageBitmap.height / 2).toFloat())
                     )
                 )
             }
