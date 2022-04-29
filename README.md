@@ -7,6 +7,9 @@
 <p align="center">
 <img src="/screenshots/eat_lib_example1.PNG" width="480" height="480"/>
 </p>
+<p align="center">
+<img src="/screenshots/eat_lib_example2.PNG" width="360" height="360"/>
+</p>
 
 # How to use
 
@@ -17,12 +20,22 @@ allprojects {
    maven { url 'https://jitpack.io' }
   }
 }
+
 ```
 And add a dependency code to your **module**'s `build.gradle` file.
 ```gradle
 implementation 'com.github.talhatek:eta-bar:1.1'
 ```
-
+You can call **ETABar** inside your composable content.
+```kotlin
+ETABar(
+  elapsedPercentage = .8f,
+  inactiveBarColor = Color.Gray,
+  activeBarColor = Color.Yellow,
+  imageBitmap = AppCompatResources.getDrawable(LocalContext.current,R.drawable.your_drawable_name)!!.toBitmap().asImageBitmap(),
+  modifier = Modifier.size(200.dp)
+)
+```
 # License
 ```xml
 Designed and developed by 2022 talhatek
