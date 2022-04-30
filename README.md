@@ -24,7 +24,7 @@ allprojects {
 ```
 And add a dependency code to your **module**'s `build.gradle` file.
 ```gradle
-implementation 'com.github.talhatek:eta-bar:1.1'
+implementation 'com.github.talhatek:eta-bar:1.6'
 ```
 You can call **ETABar** inside your composable content.
 ```kotlin
